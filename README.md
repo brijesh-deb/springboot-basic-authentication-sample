@@ -45,10 +45,24 @@
 - Use pom.xml, application.properties and table structure used in last section
 - Create an encoded password for a secret text (like "userpassword") using code in PasswordEncoderGenerator.java
 - Delete all records from table having plain text password, insert a new record with the encoded password
+```
+INSERT INTO bctorap01.USERS (ID,USERNAME,EMAIL, PASSWORD,ROLE)
+VALUES (1,'user','user@test.com','$2a$10$VGhSxMsRqG/1U.t8r2af6eCmrttYFpx7FU1QTm1eBxiSWV8LPTbpq','USER');
+```
 - For testing use Browser/Postman; url is http://localhost:8092/sample/test
 - Will work for username/password as user/userpassword; fail for others
 - Here spring security encodes "userpassword" passed and matches it will the encoded password stored in DB
 #### Using Basic authentication with RestTemplate
+- Sample code (using RestTemplate) to invoke end-point with basic authentication
+```
+	RestTemplate restTemplate = new RestTemplate();
+	String strUrl = "http://localhost:8092/sample/test";
 
+	HttpHeaders headers = new HttpHeaders();
+	headers.setContentType(MediaType.APPLICATION_JSON);
+	HttpEntity<String> entity = new HttpEntity<String>("Hello", headers);
+	restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor("user", "userpassword"));
+	String result = restTemplate.getForObject(strUrl, String.class);
+```
 
   
